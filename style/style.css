@@ -1,24 +1,4 @@
-body{
-    margin: 0;
-    font-family: 'Museo Sans Cyrl',sans-serif;
-    color: #333;
-}
-@font-face {
-    src: url('../fonts/museosanscyrl-500.ttf');
-    font-family: 'Museo Sans Cyrl';
-}
-@font-face {
-    src: url('../fonts/museosanscyrl-700.ttf');
-    font-family: 'Museo Sans Cyrl Bold';
-}
-.header{
-    padding: 42px 0 40px 0;
-    border-bottom: 1px solid #dcdcf3;
-}
-.container{
-    max-width: 1200px;
-    margin: 0 auto;
-}
+
 .main{
     padding-top: 190px;
     padding-bottom: 231px;
@@ -47,23 +27,4 @@ body{
 }
 .main-button{
     margin-top: 60px;
-}
-.button{
-    border-radius: 6px;
-    background: #6933DC;
-    padding: 14px 35px;
-    color: #FFF;
-    font-size: 17px;
-    border: 0;
-    cursor: pointer;
-    transition: .4s;
-}
-.button:hover{
-    background: #320c85;
-}
-.footer{
-    text-align: center;
-    padding:40px 0 ;
-    color: #DCDCF3;
-    font-size: 13px;
 }
