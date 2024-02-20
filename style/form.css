@@ -9,13 +9,7 @@
 .form-content{
     max-width: 504px;
 }
-.form-title{
-    font-family: "Museo Sans Cyrl Bold",sans-serif;
-    font-size: 48px;
-}
-.form-title span{
-    color: #6933DC;
-}
+
 .form-details{
     margin-top: 60px;
     max-width: 485px;

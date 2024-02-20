@@ -41,3 +41,10 @@ a{
     color: #DCDCF3;
     font-size: 13px;
 }
+.common-title{
+        font-family: "Museo Sans Cyrl Bold",sans-serif;
+        font-size: 48px;
+}
+.common-title span{
+    color: #6933DC;
+}

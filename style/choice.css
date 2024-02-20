@@ -1,0 +1,37 @@
+.choice{
+    padding: 180px 0 227px 0;
+}
+.choice .container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.choice-content{
+    max-width: 583px;
+}
+.choice-description{
+    margin-top: 40px;
+    font-size: 18px;
+}
+.choice-options{
+    margin-top: 60px;
+}
+.choice-option{
+    border: 1px solid #C1BBBB;
+    background: #FFF;
+    font-size: 18px;
+    padding: 26px 70px 26px 40px;
+    position: relative;
+}
+.choice-option:hover{
+    border-left: 5px solid #6933DC;
+}
+.choice-option-arrow{
+    position: absolute;
+    right: 40px;
+    top: 27px;
+    display: none;
+}
+.choice-option:hover .choice-option-arrow{
+    display: block;
+}
