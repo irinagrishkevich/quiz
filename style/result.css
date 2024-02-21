@@ -1,42 +1,33 @@
-.choice{
-    padding: 180px 0 227px 0;
+.result{
+    padding: 140px 0 91px 0;
+    text-align: center;
 }
-.choice .container{
+.result .container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.result-image{
+    position: absolute;
+    top: 225px;
+    z-index: -1;
+}
+.result-title{
+    max-width: 588px;
+    margin-bottom: 60px;
+}
+.result-scope{
+    background-image: url("../img/result-img.png");
+    background-size: cover;
+    background-position: center;
+    width: 480px;
+    height: 388px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-}
-.choice-content{
-    max-width: 583px;
-}
-.choice-description{
-    margin-top: 40px;
-    font-size: 18px;
-}
-.choice-options{
-    margin-top: 60px;
-    width: 588px;
-}
-.choice-option{
-    border: 1px solid #C1BBBB;
-    background: #FFF;
-    font-size: 18px;
-    padding: 26px 70px 26px 40px;
-    position: relative;
-    transition: 0.2s ease all;
-}
-.choice-option:hover{
-    border-left: 5px solid #6933DC;
-    color: #6933DC;
-    cursor: pointer;
+    justify-content: center;
+    color: #FFF;
     font-family: "Museo Sans Cyrl Bold",sans-serif;
-}
-.choice-option-arrow{
-    position: absolute;
-    right: 40px;
-    top: 27px;
-    display: none;
-}
-.choice-option:hover .choice-option-arrow{
-    display: block;
+    font-size: 158px;
+    line-height: 190px;
 }
