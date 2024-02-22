@@ -148,3 +148,13 @@ input[type="radio"]:checked::before{
     background: #DCDCF3;
     top: 6px;
 }
+.pass-question .disabled{
+    color: grey;
+}
+.pass-question .disabled img{
+    display: none;
+}
+.pass-question .disabled:hover{
+    cursor: not-allowed;
+    text-decoration: none;
+}

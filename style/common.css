@@ -52,6 +52,12 @@ a.button{
     background: #6933DC;
     color: white;
 }
+.button-transparent:disabled{
+    background: transparent;
+    color: #e2dfe7;
+    border: 1px solid #e2dfe7;
+    cursor: not-allowed;
+}
 .footer{
     text-align: center;
     padding:40px 0 ;
