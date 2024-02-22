@@ -31,9 +31,17 @@ a{
     border: 0;
     cursor: pointer;
     transition: .4s;
+    text-decoration: none;
 }
 .button:hover{
     background: #320c85;
+}
+.button:disabled{
+    background: #e2dfe7;
+    cursor: not-allowed;
+}
+a.button{
+    display: inline-block;
 }
 .button-transparent{
     background: transparent;
