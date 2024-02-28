@@ -79,3 +79,39 @@ a.button{
 .big-title span{
     color: #6933DC;
 }
+
+.link{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+.link a{
+    color: #6933DC;
+    font-size: 17px;
+    line-height: 20px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+.link a:hover{
+    text-decoration: underline;
+}
+.link a img{
+    margin-left: 13px;
+}
+.common-pre-title{
+    color: #DCDCF3;
+    font-size: 20px;
+}
+.common-question-title{
+    font-family: "Museo Sans Cyrl Bold",sans-serif;
+    font-size: 36px;
+}
+.common-question-title span{
+    color: #6933DC;
+}
+.common-question-options{
+    margin-top: 58px;
+    min-height: 344px;
+}
+
