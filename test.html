@@ -17,32 +17,13 @@
 </header>
 <section class="test">
     <div class="container">
-        <div class="test-pre-title">Тест №1. “JavaScript: Начальный уровень”</div>
-        <div class="test-progress-bar">
-            <div class="test-progress-bar-item complete">
-                <div class="test-progress-bar-item-circle"></div>
-                <div class="test-progress-bar-item-text">Вопрос 1</div>
-            </div>
-            <div class="test-progress-bar-item active">
-                <div class="test-progress-bar-item-circle"></div>
-                <div class="test-progress-bar-item-text">Вопрос 2</div>
-            </div>
-            <div class="test-progress-bar-item">
-                <div class="test-progress-bar-item-circle"></div>
-                <div class="test-progress-bar-item-text">Вопрос 3</div>
-            </div>
-            <div class="test-progress-bar-item">
-                <div class="test-progress-bar-item-circle"></div>
-                <div class="test-progress-bar-item-text">Вопрос 4</div>
-            </div>
-            <div class="test-progress-bar-item">
-                <div class="test-progress-bar-item-circle"></div>
-                <div class="test-progress-bar-item-text">Вопрос 5</div>
-            </div>
+        <div class="test-pre-title  common-pre-title" id="pre-title"></div>
+        <div class="test-progress-bar" id="progress-bar">
+
         </div>
         <div class="test-question">
-            <div class="test-question-title" id="title"></div>
-            <div class="test-question-options" id="options">
+            <div class="test-question-title common-question-title" id="title"></div>
+            <div class="test-question-options common-question-options" id="options">
 
             </div>
         </div>
@@ -52,13 +33,13 @@
             </div>
             <div class="test-time">
                 <div class="test-time-text">Осталось времени:</div>
-                <div class="test-time-clock">49</div>
+                <div class="test-time-clock" id="timer">59</div>
             </div>
             <div class="test-next-action">
                 <button class="button button-transparent" id="next" disabled>Дальше</button>
             </div>
         </div>
-        <div class="pass-question">
+        <div class="pass-question link">
             <a href="javascript:void(0)" id="pass" >Пропустить вопрос <img src="img/small-arrow.png" alt="arrow"></a>
         </div>
 
