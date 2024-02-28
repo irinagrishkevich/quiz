@@ -55,7 +55,16 @@
         chooseQuiz(element){
             const dataId = element.getAttribute('data-id')
             if(dataId){
-                location.href = 'test.html' + location.search + '&id=' + dataId
+                const formDataString = sessionStorage.getItem('formData')
+                if(formDataString){
+                    const formData = JSON.parse(formDataString)
+                    formData.id = dataId;
+                    sessionStorage.setItem('formData', JSON.stringify(formData))
+                    location.href = 'test.html?name=' + formData.name + '&lastName=' + formData.lastName + '&email=' + formData.email
+                        // + '&id=' + formData.id;
+
+                }
+                // location.href = 'test.html' + location.search + '&id=' + dataId
             }
         }
     }

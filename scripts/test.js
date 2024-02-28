@@ -1,6 +1,7 @@
 (function () {
     const Test = {
         quiz: null,
+        formDataString: null,
         progressBarElement: null,
         questionTitleElement: null,
         passButtonElement: null,
@@ -11,25 +12,32 @@
         userResult: [],
         init() {
             checkUserData()
-            const url = new URL(location.href)
-            const testId = url.searchParams.get('id')
-            if (testId) {
-                const xhr = new XMLHttpRequest()
-                xhr.open('GET', 'https://testologia.site/get-quiz?id=' + testId, false)
-                xhr.send()
-                if (xhr.status === 200 && xhr.responseText) {
-                    try {
-                        this.quiz = JSON.parse(xhr.responseText)
-                    } catch (e) {
+            // const url = new URL(location.href)
+            // const testId = url.searchParams.get('id')
+            this.formDataString = sessionStorage.getItem('formData');
+            if (this.formDataString) {
+                const formData = JSON.parse(this.formDataString);
+                if (formData.id) {
+                    const xhr = new XMLHttpRequest()
+                    xhr.open('GET', 'https://testologia.site/get-quiz?id=' + formData.id, false)
+                    xhr.send()
+                    if (xhr.status === 200 && xhr.responseText) {
+                        try {
+                            this.quiz = JSON.parse(xhr.responseText)
+                        } catch (e) {
+                            location.href = 'index.html'
+                        }
+                        this.startQuiz()
+                    } else {
                         location.href = 'index.html'
                     }
-                    this.startQuiz()
                 } else {
                     location.href = 'index.html'
                 }
-            } else {
+            }else {
                 location.href = 'index.html'
             }
+
         },
         startQuiz() {
             this.progressBarElement = document.getElementById('progress-bar')
@@ -81,7 +89,7 @@
         showQuestion() {
             const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1]
             const chosenOption = this.userResult.find(item => item.questionId === activeQuestion.id)
-            console.log(chosenOption)
+
             this.questionTitleElement.innerHTML = '<span>Вопрос ' + this.currentQuestionIndex
                 + ': </span>' + activeQuestion.question
 
@@ -195,20 +203,26 @@
             this.showQuestion()
         },
         complete(){
-            const url = new URL(location.href)
-            const testId = url.searchParams.get('id')
-            const name = url.searchParams.get('name')
-            const lastName = url.searchParams.get('lastName')
-            const email = url.searchParams.get('email')
+            // const url = new URL(location.href)
+            // const testId = url.searchParams.get('id')
+            // const name = url.searchParams.get('name')
+            // const lastName = url.searchParams.get('lastName')
+            // const email = url.searchParams.get('email')
+            const userResultString = this.userResult.map(answer => answer.chosenAnswerId).join(",");
+
+            const formData = JSON.parse(this.formDataString)
+
+            formData.result = userResultString;
+            sessionStorage.setItem('formData', JSON.stringify(formData))
 
             const xhr = new XMLHttpRequest()
-            xhr.open('POST','https://testologia.site/pass-quiz?id=' + testId, false)
+            xhr.open('POST','https://testologia.site/pass-quiz?id=' + formData.id, false)
             xhr.setRequestHeader('Content-Type','application/json;charset=UTF-8')
             // const userResultString = this.userResult.map(answer => answer.chosenAnswerId).join(",");
             xhr.send(JSON.stringify({
-                name: name,
-                lastName: lastName,
-                email: email,
+                name: formData.name,
+                lastName: formData.lastName,
+                email: formData.email,
                 results: this.userResult
             }))
 
@@ -216,12 +230,15 @@
                 let result = null
                 try {
                     result = JSON.parse(xhr.responseText)
+                    formData.score = result.score
+                    formData.total = result.total
+                    sessionStorage.setItem('formData', JSON.stringify(formData))
                 } catch (e) {
                     location.href = 'index.html'
                 }
                 if (result){
-                    const userResultString = this.userResult.map(answer => answer.chosenAnswerId).join(",");
-                    location.href = 'result.html' + location.search + '&score=' + result.score + '&total=' + result.total + '&results=' + userResultString ;
+                    location.href = 'result.html' + location.search
+                        // + '&score=' + formData.score  + '&total=' + formData.total + '&results=' + formData.result ;
                 }
             } else {
                 location.href = 'index.html'

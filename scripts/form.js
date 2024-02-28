@@ -26,7 +26,7 @@
             },
         ],
         init(){
-            console.log(this)
+
             const that = this
             this.fields.forEach(item => {
                 item.element = document.getElementById(item.id)
@@ -67,12 +67,15 @@
         },
         processForm(){
             if(this.validateForm()){
-
+                let formData = {}
                 let paramString = ''
                 this.fields.forEach(item =>{
                     paramString += (!paramString ? '?' : '&') + item.name + '=' + item.element.value
+                    formData[item.name] = item.element.value
                 })
+                sessionStorage.setItem('formData', JSON.stringify(formData));
                 location.href='choice.html' + paramString
+
             }
         }
     }

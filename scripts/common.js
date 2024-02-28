@@ -6,5 +6,6 @@ function checkUserData(){
 
     if(!name || !lastName || !email){
         location.href = 'index.html'
+
     }
 }
