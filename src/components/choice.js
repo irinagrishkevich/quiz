@@ -43,7 +43,7 @@ export class Choice {
                 choiceOptionArrowElement.className = 'choice-option-arrow'
 
                 const choiceOptionImageElement = document.createElement('img')
-                choiceOptionImageElement.setAttribute('src', 'static/img/arrow.png')
+                choiceOptionImageElement.setAttribute('src', '/img/arrow.png')
                 choiceOptionImageElement.setAttribute('alt', 'arrow')
 
                 choiceOptionArrowElement.appendChild(choiceOptionImageElement)
