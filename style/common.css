@@ -7,11 +7,11 @@ a{
     color: #6933DC;
 }
 @font-face {
-    src: url('../fonts/museosanscyrl-500.ttf');
+    src: url('../static/fonts/museosanscyrl-500.ttf');
     font-family: 'Museo Sans Cyrl';
 }
 @font-face {
-    src: url('../fonts/museosanscyrl-700.ttf');
+    src: url('../static/fonts/museosanscyrl-700.ttf');
     font-family: 'Museo Sans Cyrl Bold';
 }
 .header{
