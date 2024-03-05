@@ -1,3 +1,5 @@
+import {UrlManager} from "../utils/url-manager.js";
+
 export class Answers {
     constructor() {
         this.quiz = null
@@ -8,7 +10,8 @@ export class Answers {
         this.currentQuestionIndex = 0
         this.chosenAnswersIds = []
         this.quizAnswersRight = []
-        checkUserData()
+        this.routeParams = UrlManager.getQueryParams()
+        UrlManager.checkUserData(this.routeParams)
         // const url = new URL(location.href)
         // const testId = url.searchParams.get('id')
         // const nameUser = url.searchParams.get('name')
@@ -54,7 +57,7 @@ export class Answers {
         document.getElementById('test-user').innerHTML = 'Тест выполнил: ' + '<span>' + formData.name + ' ' + formData.lastName + ', ' + formData.email + '</span>'
         this.resultButtonElement = document.getElementById('link')
         this.resultButtonElement.addEventListener('click', function () {
-            location.href = 'result.html' + location.search;
+            location.href = '#/result?name=' + formData.name + '&lastName=' + formData.lastName + '&email=' + formData.email + '&score=' + formData.score  + '&total=' + formData.total + '&results=' + formData.result;
         });
     }
 

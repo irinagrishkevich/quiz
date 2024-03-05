@@ -1,3 +1,5 @@
+import {UrlManager} from "../utils/url-manager.js";
+
 export class Test {
 
     constructor() {
@@ -12,7 +14,8 @@ export class Test {
         this.currentQuestionIndex = 1
         this.userResult = []
 
-        checkUserData()
+        this.routeParams = UrlManager.getQueryParams()
+        UrlManager.checkUserData(this.routeParams)
         // const url = new URL(location.href)
         // const testId = url.searchParams.get('id')
         this.formDataString = sessionStorage.getItem('formData');
@@ -243,7 +246,7 @@ export class Test {
                 location.href = '#/'
             }
             if (result) {
-                location.href = '#/result' + location.search
+                location.href = '#/result?name=' + formData.name + '&lastName=' + formData.lastName + '&email=' + formData.email + '&score=' + formData.score  + '&total=' + formData.total + '&results=' + formData.result
                 // + '&score=' + formData.score  + '&total=' + formData.total + '&results=' + formData.result ;
             }
         } else {

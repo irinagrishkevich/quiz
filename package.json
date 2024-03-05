@@ -11,5 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "http-server": "^14.1.1"
+  },
+  "devDependencies": {
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
   }
 }
