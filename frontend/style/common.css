@@ -1,3 +1,12 @@
+
+@font-face {
+    src: url('../static/fonts/museosanscyrl-500.ttf') format("ttf");
+    font-family: 'Museo Sans Cyrl';
+}
+@font-face {
+    src: url('../static/fonts/museosanscyrl-700.ttf') format("ttf");
+    font-family: 'Museo Sans Cyrl Bold';
+}
 body{
     margin: 0;
     font-family: 'Museo Sans Cyrl',sans-serif;
@@ -5,14 +14,6 @@ body{
 }
 a{
     color: #6933DC;
-}
-@font-face {
-    src: url('../static/fonts/museosanscyrl-500.ttf');
-    font-family: 'Museo Sans Cyrl';
-}
-@font-face {
-    src: url('../static/fonts/museosanscyrl-700.ttf');
-    font-family: 'Museo Sans Cyrl Bold';
 }
 .header{
     padding: 42px 0 40px 0;
@@ -115,3 +116,23 @@ a.button{
     min-height: 344px;
 }
 
+.header .container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.profile{
+    display: flex;
+    align-items: center;
+}
+.profile-img{
+    margin-right: 5px;
+}
+.profile-user{
+    font-size: 18px;
+    line-height: 18px;
+}
+.profile-logout{
+    font-size: 12px;
+    line-height: 12px;
+}

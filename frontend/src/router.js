@@ -3,9 +3,15 @@ import {Choice} from "./components/choice.js";
 import {Test} from "./components/test.js";
 import {Result} from "./components/result.js";
 import {Answers} from "./components/answers.js";
+import {Auth} from "./services/auth.js";
 
 export class Router {
     constructor() {
+        this.contentElement = document.getElementById('content')
+        this.stylesElement = document.getElementById('style')
+        this.titlelement = document.getElementById('title-page')
+        this.profileElement = document.getElementById('profile')
+        this.profileFullNameElement = document.getElementById('profile-full-name"')
         this.routers = [
             {
                 route: '#/',
@@ -73,18 +79,35 @@ export class Router {
     }
 
     async openRoute() {
-        const newRoute = this.routers.find(item => item.route === window.location.hash.split('?')[0])
+        const urlRoute = window.location.hash.split('?')[0]
+        if (urlRoute === '#/logout'){
+            Auth.logout()
+            window.location.href = '#/'
+            return;
+        }
+        const newRoute = this.routers.find(item => item.route === urlRoute)
 
         if (!newRoute) {
             window.location.href = '#/'
             return
         }
 
-        document.getElementById('content').innerHTML =
+        this.contentElement.innerHTML =
             await fetch(newRoute.template).then(response => response.text())
-        document.getElementById('style').setAttribute('href', newRoute.styles)
+        this.stylesElement.setAttribute('href', newRoute.styles)
+        this.titlelement.innerText = newRoute.title
+
+        const userInfo = Auth.getUserInfo()
+        const accessToken = localStorage.getItem(Auth.accessTokenKey)
+        if (userInfo && accessToken) {
+            this.profileElement.style.display = 'flex'
+            this.profileFullNameElement.innerText= userInfo.fullName
+        }else {
+            this.profileElement.style.display = 'none'
+        }
+
+
         newRoute.load()
-        document.getElementById('title-page').innerText = newRoute.title
     }
 
 }
