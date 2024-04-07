@@ -10,6 +10,9 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         clean: true,
     },
+    resolve: {
+        fallback: { "querystring": require.resolve("querystring-es3") }
+    },
     devServer: {
         static: '.dist',
         compress: true,

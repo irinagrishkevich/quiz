@@ -1,4 +1,7 @@
 import {UrlManager} from "../utils/url-manager.js";
+import {CustomHttp} from "../services/custom-http.js";
+import config from "../../config/config.js";
+import {Auth} from "../services/auth.js";
 
 export class Answers {
     constructor() {
@@ -11,66 +14,66 @@ export class Answers {
         this.chosenAnswersIds = []
         this.quizAnswersRight = []
         this.routeParams = UrlManager.getQueryParams()
-        UrlManager.checkUserData(this.routeParams)
-        // const url = new URL(location.href)
-        // const testId = url.searchParams.get('id')
-        // const nameUser = url.searchParams.get('name')
-        // const lastName = url.searchParams.get('lastName')
-        // const email = url.searchParams.get('email')
-        // this.chosenAnswersIds = url.searchParams.get('results').split(",");
-        this.formDataString = sessionStorage.getItem('formData');
-        const formData = JSON.parse(this.formDataString);
-        this.chosenAnswersIds = formData.result.split(",")
 
-        if (formData.id) {
-            const xhr = new XMLHttpRequest()
-            xhr.open('GET', 'https://testologia.site/get-quiz?id=' + formData.id, false)
-            xhr.send()
-            if (xhr.status === 200 && xhr.responseText) {
-                try {
-                    this.quiz = JSON.parse(xhr.responseText)
 
-                } catch (e) {
-                    location.href = '#/'
-                }
-            } else {
-                location.href = '#/'
-            }
-        } else {
-            location.href = '#/'
-        }
-        const xhr = new XMLHttpRequest()
-        xhr.open('GET', 'https://testologia.site/get-quiz-right?id=' + formData.id, false)
-        xhr.send()
-        if (xhr.status === 200 && xhr.responseText) {
-            try {
-                this.quizAnswersRight = JSON.parse(xhr.responseText)
-            } catch (e) {
-                location.href = '#/'
-            }
+        this.init()
 
-        } else {
-            location.href = '#/'
-        }
-        this.start()
-        document.getElementById('test-name').innerText = this.quiz.name
-        document.getElementById('test-user').innerHTML = 'Тест выполнил: ' + '<span>' + formData.name + ' ' + formData.lastName + ', ' + formData.email + '</span>'
+        document.getElementById('test-user').innerHTML = 'Тест выполнил: ' + '<span>' + Auth.getUserInfo().fullName + ', ' + Auth.getEmail() + '</span>'
         this.resultButtonElement = document.getElementById('link')
+        const that = this
         this.resultButtonElement.addEventListener('click', function () {
-            location.href = '#/result?name=' + formData.name + '&lastName=' + formData.lastName + '&email=' + formData.email + '&score=' + formData.score  + '&total=' + formData.total + '&results=' + formData.result;
+            location.href = '#/result?id=' + that.routeParams.id
         });
     }
 
+    async init() {
+        const userInfo = Auth.getUserInfo()
+        try {
+            const result = await CustomHttp.request(config.host +'/tests/' + this.routeParams.id + '/result?userId=' + userInfo.userId)
+            if (result) {
+                if (result.error) {
+                    throw new Error(result.error)
+                }
+                this.quizAnswersRight = result
+            }
+
+        } catch (error) {
+            console.error(error)
+        }
+
+
+        if (userInfo) {
+            try {
+                const result = await CustomHttp.request(config.host +'/tests/' + this.routeParams.id + '/result/details?userId=' + userInfo.userId)
+
+                if (result) {
+                    if (result.error) {
+                        throw new Error(result.error)
+                    }
+                    this.quiz = result
+                }
+
+            } catch (error) {
+                return console.error(error)
+            }
+
+        }
+        this.start()
+
+    }
+
+
     start() {
-        this.quiz.questions.forEach((question, index) => {
+        this.quiz.test.questions.forEach((question, index) => {
             this.currentQuestionIndex = index + 1;
             this.showQuestion();
         });
     }
 
     showQuestion() {
-        const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];
-
+        document.getElementById('test-name').innerText = this.quiz.test.name
+        const activeQuestion = this.quiz.test.questions[this.currentQuestionIndex - 1];
+        console.log(activeQuestion)
         const questionElement = document.createElement('div');
         questionElement.className = 'common-question-title';
         questionElement.innerHTML = '<span>Вопрос ' + this.currentQuestionIndex + ': </span>' + activeQuestion.question;
@@ -117,9 +120,14 @@ export class Answers {
                     inputElement.classList.add('un-correct');
                 }
             }
+            if (answer.correct === true) {
+                    inputElement.classList.add('correct');
+                } else if(answer.correct === false){
+                    inputElement.classList.add('un-correct');
+
+            }
         });
         document.getElementById('question').appendChild(allQuestionAndAnswers)
-
     }
 }
 

@@ -1,24 +1,47 @@
 import {UrlManager} from "../utils/url-manager.js";
+import {CustomHttp} from "../services/custom-http.js";
+import config from "../../config/config.js";
+import {Auth} from "../services/auth.js";
+import * as querystring from "querystring";
 
 export class Result {
     // url:null,
     constructor() {
         this.answersButtonElement = null
-        this.formDataString = null
 
         this.routeParams = UrlManager.getQueryParams()
-        UrlManager.checkUserData(this.routeParams)
-        this.formDataString = sessionStorage.getItem('formData');
-        const formData = JSON.parse(this.formDataString);
+        this.init()
 
-        // this.url = new URL(location.href);
-        document.getElementById('result-scope').innerText = formData.score +
-            '/' + formData.total
+    }
+    async init() {
+        const userInfo = Auth.getUserInfo()
+        if (!userInfo) {
+            location.href = '#/'
+        }
+        if (this.routeParams.id){
+            try {
+                const result = await CustomHttp.request(config.host + '/tests/' + this.routeParams.id + '/result?userId=' + userInfo.userId)
+                let testId = this.routeParams.id
+                if (result) {
+                    const that = this
+                    if (result.error) {
+                        throw new Error(result.error)
+                    }
+                    document.getElementById('result-scope').innerText = result.score +
+                        '/' + result.total
+                    this.answersButtonElement = document.getElementById('link')
+                    this.answersButtonElement.addEventListener('click', function () {
+                        location.href = '#/answers?id=' + testId
+                    });
+                    return
+                }
 
-        this.answersButtonElement = document.getElementById('link')
-        this.answersButtonElement.addEventListener('click', function () {
-            location.href = '#/answers?name=' + formData.name + '&lastName=' + formData.lastName + '&email=' + formData.email + '&results=' + formData.result;
-        });
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        location.href = '#/'
+
 
     }
 }

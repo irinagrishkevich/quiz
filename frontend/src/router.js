@@ -9,9 +9,10 @@ export class Router {
     constructor() {
         this.contentElement = document.getElementById('content')
         this.stylesElement = document.getElementById('style')
-        this.titlelement = document.getElementById('title-page')
+        this.titleElement = document.getElementById('title-page')
         this.profileElement = document.getElementById('profile')
-        this.profileFullNameElement = document.getElementById('profile-full-name"')
+        this.profileFullNameElement = document.getElementById('profile-full-name')
+
         this.routers = [
             {
                 route: '#/',
@@ -81,7 +82,7 @@ export class Router {
     async openRoute() {
         const urlRoute = window.location.hash.split('?')[0]
         if (urlRoute === '#/logout'){
-            Auth.logout()
+            await Auth.logout()
             window.location.href = '#/'
             return;
         }
@@ -95,7 +96,7 @@ export class Router {
         this.contentElement.innerHTML =
             await fetch(newRoute.template).then(response => response.text())
         this.stylesElement.setAttribute('href', newRoute.styles)
-        this.titlelement.innerText = newRoute.title
+        this.titleElement.innerText = newRoute.title
 
         const userInfo = Auth.getUserInfo()
         const accessToken = localStorage.getItem(Auth.accessTokenKey)

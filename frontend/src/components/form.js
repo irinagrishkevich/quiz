@@ -8,6 +8,11 @@ export class Form {
         this.agreeElement = null
         this.processElement = null
         this.page = page
+        const accessToken = localStorage.getItem(Auth.accessTokenKey)
+        if (accessToken) {
+            location.href = '#/choice'
+            return
+        }
         this.fields = [
             {
                 name: 'email',
@@ -91,6 +96,7 @@ export class Form {
     async processForm() {
         if (this.validateForm()) {
             const email = this.fields.find(item => item.name === 'email').element.value
+            Auth.setEmail(email)
             const password = this.fields.find(item => item.name === 'password').element.value
 
             if (this.page === 'signup') {
@@ -123,7 +129,6 @@ export class Form {
                         !result.fullName || !result.userId) {
                         throw new Error(result.message)
                     }
-
                     Auth.setTokens(result.accessToken, result.refreshToken)
                     Auth.setUserInfo({
                         fullName: result.fullName,

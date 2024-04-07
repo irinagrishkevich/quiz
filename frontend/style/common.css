@@ -127,6 +127,7 @@ a.button{
 }
 .profile-img{
     margin-right: 5px;
+    cursor: pointer;
 }
 .profile-user{
     font-size: 18px;

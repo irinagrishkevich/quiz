@@ -1,10 +1,12 @@
 import {UrlManager} from "../utils/url-manager.js";
+import {CustomHttp} from "../services/custom-http.js";
+import config from "../../config/config.js";
+import {Auth} from "../services/auth.js";
 
 export class Test {
 
     constructor() {
         this.quiz = null
-        this.formDataString = null
         this.progressBarElement = null
         this.questionTitleElement = null
         this.passButtonElement = null
@@ -13,33 +15,29 @@ export class Test {
         this.optionsElement = null
         this.currentQuestionIndex = 1
         this.userResult = []
-
         this.routeParams = UrlManager.getQueryParams()
-        UrlManager.checkUserData(this.routeParams)
-        // const url = new URL(location.href)
-        // const testId = url.searchParams.get('id')
-        this.formDataString = sessionStorage.getItem('formData');
-        if (this.formDataString) {
-            const formData = JSON.parse(this.formDataString);
-            if (formData.id) {
-                const xhr = new XMLHttpRequest()
-                xhr.open('GET', 'https://testologia.site/get-quiz?id=' + formData.id, false)
-                xhr.send()
-                if (xhr.status === 200 && xhr.responseText) {
-                    try {
-                        this.quiz = JSON.parse(xhr.responseText)
-                    } catch (e) {
-                        location.href = '#/'
-                    }
-                    this.startQuiz()
-                } else {
-                    location.href = '#/'
+
+
+        this.init()
+
+    }
+
+    async init() {
+
+        try {
+            const result = await CustomHttp.request(config.host + '/tests/' + this.routeParams.id)
+
+            if (result) {
+                if (result.error) {
+                    throw new Error(result.error)
                 }
-            } else {
-                location.href = '#/'
+
+                this.quiz = result
+                this.startQuiz()
             }
-        } else {
-            location.href = '#/'
+
+        } catch (error) {
+            console.error(error)
         }
     }
 
@@ -61,11 +59,11 @@ export class Test {
 
         const timerElement = document.getElementById('timer')
         let seconds = 59
-        const interval = setInterval(function () {
+        this.interval = setInterval(function () {
             seconds--
             timerElement.innerText = seconds
             if (seconds === 0) {
-                clearInterval(interval)
+                clearInterval(this.interval)
                 this.complete()
             }
         }.bind(this), 1000)
@@ -193,6 +191,7 @@ export class Test {
         }
 
         if (this.currentQuestionIndex > this.quiz.questions.length) {
+            clearInterval(this.interval)
             this.complete()
             return
         }
@@ -211,46 +210,29 @@ export class Test {
         this.showQuestion()
     }
 
-    complete() {
-        // const url = new URL(location.href)
-        // const testId = url.searchParams.get('id')
-        // const name = url.searchParams.get('name')
-        // const lastName = url.searchParams.get('lastName')
-        // const email = url.searchParams.get('email')
-        const userResultString = this.userResult.map(answer => answer.chosenAnswerId).join(",");
-
-        const formData = JSON.parse(this.formDataString)
-
-        formData.result = userResultString;
-        sessionStorage.setItem('formData', JSON.stringify(formData))
-
-        const xhr = new XMLHttpRequest()
-        xhr.open('POST', 'https://testologia.site/pass-quiz?id=' + formData.id, false)
-        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-        // const userResultString = this.userResult.map(answer => answer.chosenAnswerId).join(",");
-        xhr.send(JSON.stringify({
-            name: formData.name,
-            lastName: formData.lastName,
-            email: formData.email,
-            results: this.userResult
-        }))
-
-        if (xhr.status === 200 && xhr.responseText) {
-            let result = null
-            try {
-                result = JSON.parse(xhr.responseText)
-                formData.score = result.score
-                formData.total = result.total
-                sessionStorage.setItem('formData', JSON.stringify(formData))
-            } catch (e) {
-                location.href = '#/'
-            }
-            if (result) {
-                location.href = '#/result?name=' + formData.name + '&lastName=' + formData.lastName + '&email=' + formData.email + '&score=' + formData.score  + '&total=' + formData.total + '&results=' + formData.result
-                // + '&score=' + formData.score  + '&total=' + formData.total + '&results=' + formData.result ;
-            }
-        } else {
+    async complete() {
+        const userInfo = Auth.getUserInfo()
+        if (userInfo) {
             location.href = '#/'
         }
+
+        console.log(this.userResult)
+        console.log(userInfo.id)
+       try {
+           const result = await CustomHttp.request(config.host + '/tests/' + this.routeParams.id + '/pass', 'POST', {
+               userId: userInfo.userId,
+               results: this.userResult
+           })
+           if (result){
+               if (result.error){
+                   throw new Error(result.error)
+               }
+               location.href = '#/result?id=' + this.routeParams.id
+           }
+       }
+        catch (error){
+                console.log(error)
+        }
+
     }
 }
